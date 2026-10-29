@@ -21,7 +21,7 @@
         <item>com.google.android.youtube.tv</item>
         <item>com.fctv77.tv</item>
         <item>com.amazon.amazonvideo.livingroom</item>
-        <item>com.rtve.androidtv</item>
+        <item>rtve.tablet.android</item>
         <item>com.mediatek.wwtv.tvcenter</item>
     </string-array>
     <!-- With fewer dock_apps than columns (or a dock app that is not installed), the free dock slots take

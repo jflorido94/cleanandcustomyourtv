@@ -691,12 +691,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         });
         launcherSettingsButton = cfg.launcherSettingsButton;
         if (launcherSettingsButton) {
-            ((TextView) btnSettings).setText(R.string.launcher_settings);
+            ((TextView) btnSettings).setText(R.string.settings);
             ((TextView) btnSettings).setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_home_settings_pill, 0, 0, 0);
         }
         btnSettings.setOnClickListener(v -> {
-            if (launcherSettingsButton) startActivityForResult(
-                    new Intent(this, LauncherSettingsActivity.class), LAUNCHER_SETTINGS_REQUEST);
+            if (launcherSettingsButton) showSettingsChoice(v);
             else open(systemIntent(Settings.ACTION_SETTINGS));
         });
         btnReorder = findViewById(R.id.btnReorder);
@@ -2319,6 +2318,20 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             bar.addView(button, bar.indexOfChild(btnWifi));
             topAppButtons.add(button);
         }
+    }
+
+    /** The top-bar Settings button when launcher_settings_button is on: a drop-down with the two settings. */
+    private void showSettingsChoice(View anchor) {
+        View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
+        LinearLayout rows = panel.findViewById(R.id.rows);
+        PopupWindow popup = glassPopup(panel, (int) (220 * density));
+        addSettingsMenuRow(rows, popup, R.string.tv_settings, () -> open(systemIntent(Settings.ACTION_SETTINGS)));
+        addSettingsMenuRow(rows, popup, R.string.launcher_settings, () -> startActivityForResult(
+                new Intent(this, LauncherSettingsActivity.class), LAUNCHER_SETTINGS_REQUEST));
+        panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        popup.setWidth(Math.max((int) (220 * density), panel.getMeasuredWidth()));
+        dropIn(popup, panel, anchor, Gravity.END);
+        rows.getChildAt(0).requestFocus();
     }
 
     @Override public void onLibraryUp() {
